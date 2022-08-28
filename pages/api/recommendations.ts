@@ -49,6 +49,6 @@ export default function handler(
     });
   }
   else{
-    res.status(405).json({ message: "Method not allowed" });
+    res.status(405).json({ message: "Method not allowed s" });
   }
 }
