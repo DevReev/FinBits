@@ -1,9 +1,10 @@
 import Link from "next/link";
 import React from "react";
 import Card from "../components/Card";
+import cheerio from "cheerio";
 
 function stockideas({ data }) {
-  // str()
+  // str()s
   //   convert data to string
 
   // console.log(data);
@@ -91,7 +92,7 @@ function stockideas({ data }) {
       <div class="grid grid-cols-3 mx-auto">
         {/* Map the data */}
         {/* {data.map((item) => <div></div>} */}
-        {data["winners"].map((rec) => (
+        {data.map((rec) => (
           <div class="card w-96 bg-base-100 shadow-xl my-5 mx-5">
             <figure>
               {/* <img
@@ -129,9 +130,38 @@ export async function getServerSideProps() {
   // Fetch data from external API
   const options = { method: "GET" };
 
-  const res = await fetch("http://localhost:3000/api/recommendations", options);
-  // const res = await fetch(`https://.../data`);
-  const data = await res.json();
+  const getRawData = (URL) => {
+    return fetch(URL)
+      .then((response) => response.text())
+      .then((data) => {
+        return data;
+      });
+  };
+
+  // URL for data
+  const URL = "https://www.moneycontrol.com/stocks/advice/display_more.php";
+
+  const getCricketWorldCupsList = async () => {
+    const cricketWorldCupRawData = await getRawData(URL);
+    let winners = [];
+
+    // parsing the data
+    const parsedCricketWorldCupData = cheerio.load(cricketWorldCupRawData);
+
+    parsedCricketWorldCupData("#listingn").each((i, el) => {
+      // winners.push("Buy")
+      var $li = parsedCricketWorldCupData(el).find("li");
+      $li.each((i, el) => {
+        winners.push(parsedCricketWorldCupData(el).text());
+      });
+      // $div.each((i, el) => {})
+      // winners.push($div.find('a').text(),);
+    });
+
+    return winners;
+  };
+
+  const data = await getCricketWorldCupsList();
 
   // Pass data to the page via props
   return { props: { data } };
