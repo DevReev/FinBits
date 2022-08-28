@@ -18,6 +18,7 @@ import {
   BarController,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
+import Nav from "../components/Nav";
 
 ChartJS.register(
   CategoryScale,
@@ -46,90 +47,17 @@ function decodingmarket({ data, mmi }) {
   let PE = [];
   let CE = [];
 
-  for (let i = 0; i < data.data.filtered.data.length; i++) {
-    strikes.push(data.data.filtered.data[i]["strikePrice"]);
-    PE.push(data.data.filtered.data[i]["PE"]["openInterest"]);
-    CE.push(data.data.filtered.data[i]["CE"]["openInterest"]);
+  for (let i = 0; i < data.filtered.data.length; i++) {
+    strikes.push(data.filtered.data[i]["strikePrice"]);
+    PE.push(data.filtered.data[i]["PE"]["openInterest"]);
+    CE.push(data.filtered.data[i]["CE"]["openInterest"]);
   }
   // console.log(CE);
 
   // console.log(typeof strikes);
   return (
     <div className="flex min-h-screen flex-col py-5 px-5">
-      <nav>
-        <div class="navbar bg-base-100">
-          <div class="navbar-start">
-            <div class="dropdown">
-              <label tabindex="0" class="btn btn-ghost lg:hidden">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 6h16M4 12h8m-8 6h16"
-                  />
-                </svg>
-              </label>
-              <ul
-                tabindex="0"
-                class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-              >
-                <li>
-                  <a>Item 1</a>
-                </li>
-
-                <li>
-                  <a>Item 3</a>
-                </li>
-              </ul>
-            </div>
-            <Link href="/">
-              <a className="btn btn-ghost normal-case text-xl">Finbits</a>
-            </Link>
-          </div>
-          <div class="navbar-center hidden lg:flex">
-            <ul class="menu menu-horizontal p-0">
-              <li>
-                <a>Item 1</a>
-              </li>
-              <li tabindex="0">
-                <a>
-                  Parent
-                  <svg
-                    class="fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                  </svg>
-                </a>
-                <ul class="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a>Item 3</a>
-              </li>
-            </ul>
-          </div>
-          <div class="navbar-end">
-            <a class="btn">Get started</a>
-          </div>
-        </div>
-      </nav>
+      <Nav />
 
       <div className="w-2/3 mx-auto mt-7 mb-28">
         {/* <h1
@@ -247,9 +175,27 @@ function decodingmarket({ data, mmi }) {
 
 export async function getServerSideProps() {
   const options = { method: "GET" };
-  const res = await fetch("http://localhost:3000/api/oi", options);
+
+  let getData = async () => {
+    let options = {
+      method: "GET",
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.9,hi;q=0.8",
+      },
+    };
+    const res = await fetch(
+      "https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY",
+      options
+    );
+    const data = await res.json();
+    return data;
+  };
+
   // const res = await fetch(`https://.../data`);
-  const data = await res.json();
+  const data = await getData();
 
   const getRawData = (URL: string) => {
     return fetch(URL)
@@ -277,7 +223,7 @@ export async function getServerSideProps() {
 
   // Pass data to the page via props
   const mmi = await getMMI();
-  console.log(mmi);
+  // console.log(mmi);
 
   return { props: { data, mmi } };
 }

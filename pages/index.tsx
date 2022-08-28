@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Card from "../components/Card";
+import Nav from "../components/Nav";
 import Link from "next/link";
 import Blog from "../components/Blog";
 import cheerio from "cheerio";
@@ -16,80 +17,7 @@ const Home: NextPage = ({ data, recData }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <nav>
-        <div class="navbar bg-base-100">
-          <div class="navbar-start">
-            <div class="dropdown">
-              <label tabindex="0" class="btn btn-ghost lg:hidden">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 6h16M4 12h8m-8 6h16"
-                  />
-                </svg>
-              </label>
-              <ul
-                tabindex="0"
-                class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-              >
-                <li>
-                  <a>Item 1</a>
-                </li>
-
-                <li>
-                  <a>Item 3</a>
-                </li>
-              </ul>
-            </div>
-            <Link href="/">
-              <a className="btn btn-ghost normal-case text-xl">Finbits</a>
-            </Link>
-          </div>
-          <div class="navbar-center hidden lg:flex">
-            <ul class="menu menu-horizontal p-0">
-              <li>
-                <a>Item 1</a>
-              </li>
-              <li tabindex="0">
-                <a>
-                  Parent
-                  <svg
-                    class="fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                  </svg>
-                </a>
-                <ul class="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a>Item 3</a>
-              </li>
-            </ul>
-          </div>
-          <div class="navbar-end">
-            <a class="btn">Get started</a>
-          </div>
-        </div>
-      </nav>
+      <Nav />
 
       <main className="flex min-h-screen w-full flex-1 flex-col py-5 px-20 text-center rounded-md my-5">
         <div class="hero min-h-16 bg-base-200 rounded-lg">
@@ -225,7 +153,7 @@ const Home: NextPage = ({ data, recData }) => {
         <Blog />
       </main>
 
-      <footer className="flex h-24 w-full items-center justify-center border-t">
+      {/* <footer className="flex h-24 w-full items-center justify-center border-t">
         <a
           className="flex items-center justify-center gap-2"
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -235,7 +163,7 @@ const Home: NextPage = ({ data, recData }) => {
           Powered by{" "}
           <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
         </a>
-      </footer>
+      </footer> */}
     </div>
   );
 };
